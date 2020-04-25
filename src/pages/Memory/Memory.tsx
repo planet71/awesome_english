@@ -1,3 +1,4 @@
 import React from 'react';
+import { MemoryGame } from '../../games/Memory';
 
-export const Memory = () => <div>Dupa</div>;
+export const Memory = () => <MemoryGame />;

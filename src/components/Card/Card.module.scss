@@ -1,0 +1,50 @@
+.wrapper {
+    position: relative;
+    box-sizing: border-box;
+    width: 10rem;
+    height: 10rem;
+    border-radius: .3rem;
+    border: 1px solid #000;
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
+    background-color: #37B6F6;
+    cursor: pointer;
+
+    perspective: 1000px;
+    transition: transform .3s, background-color .2s ease-in-out;
+    transform-style: preserve-3d;
+
+    &:hover,
+    &.active {
+        background-color: #F9E104;
+    }
+
+    &.active, 
+    &.match {
+        transform: rotateY(180deg);
+    }
+
+    &.match {
+        background-color: #35D461;
+        cursor: auto;
+    }
+}
+
+.content {
+    position: absolute;
+    top: .2rem;
+    bottom: .2rem;
+    left: .2rem;
+    right: .2rem;
+    border-radius: .2rem;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+.backSide,
+.frontSide {
+    composes: content;
+}
+
+.backSide {
+    transform: rotateY(180deg);
+}

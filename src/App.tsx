@@ -1,22 +1,24 @@
 import React from 'react';
-import './App.css';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-import { routes, Path } from './routes';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { routes } from './routes';
+import styles from './App.module.scss';
 
 function App() {
     return (
-        <BrowserRouter>
-            <Switch>
-                {routes.map((route, i) => (
-                    <Route
-                        exact={route.exact}
-                        key={i}
-                        path={route.path}
-                        component={route.component}
-                    />
-                ))}
-            </Switch>
-        </BrowserRouter>
+        <div className={styles.wrapper}>
+            <BrowserRouter>
+                <Switch>
+                    {routes.map((route, i) => (
+                        <Route
+                            exact={route.exact}
+                            key={i}
+                            path={route.path}
+                            component={route.component}
+                        />
+                    ))}
+                </Switch>
+            </BrowserRouter>
+        </div>
     );
 }
 
