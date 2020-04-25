@@ -1,11 +1,21 @@
+import uniqid from 'uniqid';
+
 enum Animals {
     Dog = 'dog',
-    Dog2 = 'dog',
     Cat = 'cat',
-    Cat2 = 'cat',
 }
+const duplicatAndAddId = <C>(array: C[]) =>
+    array.concat(
+        array.map((element) => ({
+            ...element,
+            id: uniqid(),
+        })),
+    );
 
-export const AnimalsCards = Object.values(Animals).map((animal) => ({
-    name: animal,
-    src: `/animals/${animal}.jpg`,
-}));
+export const AnimalsCards = duplicatAndAddId(
+    Object.values(Animals).map((animal) => ({
+        name: animal,
+        src: `/animals/${animal}.jpg`,
+        id: uniqid(),
+    })),
+);

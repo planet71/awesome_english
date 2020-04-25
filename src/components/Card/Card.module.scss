@@ -7,13 +7,18 @@
     border: 1px solid #000;
     box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
     background-color: #37B6F6;
-    cursor: pointer;
 
     perspective: 1000px;
     transition: transform .3s, background-color .2s ease-in-out;
     transform-style: preserve-3d;
 
-    &:hover,
+    &.hooverable {
+        cursor: pointer;
+        &:hover{
+            background-color: #F9E104;
+        }
+    }
+
     &.active {
         background-color: #F9E104;
     }
@@ -21,11 +26,11 @@
     &.active, 
     &.match {
         transform: rotateY(180deg);
+        cursor: auto;
     }
 
     &.match {
         background-color: #35D461;
-        cursor: auto;
     }
 }
 

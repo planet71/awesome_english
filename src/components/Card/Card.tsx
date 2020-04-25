@@ -6,9 +6,9 @@ import cx from 'classnames';
 export interface CardProps {
     src: string;
     name: string;
-    onClick(name: string): void;
     isActive: boolean;
     isMatch: boolean;
+    onClick?(): void;
 }
 
 const CardComponent = ({ src, name, onClick, isActive, isMatch }: CardProps) => {
@@ -16,15 +16,11 @@ const CardComponent = ({ src, name, onClick, isActive, isMatch }: CardProps) => 
 
     return (
         <div
-            onClick={() => {
-                if (!isMatch) {
-                    onClick(name);
-                    flip(true);
-                }
-            }}
+            onClick={handleOnClick(flip, onClick)}
             className={cx(styles.wrapper, {
                 [styles.active]: flipped && isActive,
                 [styles.match]: isMatch,
+                [styles.hooverable]: onClick,
             })}
         >
             <div
@@ -44,5 +40,13 @@ const CardComponent = ({ src, name, onClick, isActive, isMatch }: CardProps) => 
         </div>
     );
 };
+
+const handleOnClick = (flip: any, onClick?: () => void) =>
+    onClick
+        ? () => {
+              onClick && onClick();
+              flip(true);
+          }
+        : undefined;
 
 export const Card = memo(CardComponent);
