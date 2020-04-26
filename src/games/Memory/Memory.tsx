@@ -1,7 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import styles from './Memory.module.scss';
-import { AnimalsCards } from './animals';
-import { Card } from '../../components/Card/Card';
+import { AnimalsCards, Card } from './animals';
+import { Card as CardComponent } from '../../components/Card/Card';
+import { shuffle } from 'lodash';
 
 interface Matches {
     [key: string]: boolean;
@@ -16,7 +17,11 @@ type Actives = [Active?, Active?];
 const MemoryComponent = () => {
     const [actives, setActives] = useState<Actives>([]);
     const [matched, setMatch] = useState<Matches>({});
-
+    const [name, sayName] = useState<string>();
+    const [cards, setCards] = useState<Card[]>(AnimalsCards);
+    useEffect(() => {
+        setCards(shuffle(AnimalsCards));
+    }, []);
     useEffect(() => {
         const firstActive = actives[0];
         const secondActive = actives[1];
@@ -31,16 +36,23 @@ const MemoryComponent = () => {
                     ...matched,
                     [firstActive.name]: true,
                 });
+                sayName(firstActive.name);
             }
 
             return () => clearTimeout(id);
         }
     }, [actives, matched]);
 
+    useEffect(() => {
+        if (name) {
+            const synth = window.speechSynthesis;
+            synth.speak(new SpeechSynthesisUtterance(name));
+        }
+    }, [name]);
     return (
-        <div className={styles.memory}>
-            {AnimalsCards.map(({ name, src, id }) => (
-                <Card
+        <div className={styles.memory} style={getStyles(cards)}>
+            {cards.map(({ name, src, id }) => (
+                <CardComponent
                     key={id}
                     name={name}
                     src={src}
@@ -51,6 +63,24 @@ const MemoryComponent = () => {
             ))}
         </div>
     );
+};
+
+const getStyles = (cards: Card[]) => {
+    /**
+     * Calculate card side based on viewport area.
+     */
+    const viewPortHeight = window.innerHeight;
+    const viewPortArea = viewPortHeight * viewPortHeight;
+    const cardArea = viewPortArea / cards.length;
+    const cardSide = Math.floor(Math.sqrt(cardArea));
+
+    const rows = Math.floor(viewPortHeight / cardSide);
+    let columns = Math.ceil(cards.length / rows);
+
+    return {
+        gridTemplateColumns: `repeat(${columns}, ${cardSide}px)`,
+        gridTemplateRows: `repeat(${rows}, ${cardSide}px)`,
+    };
 };
 
 const handleOnClick = (
