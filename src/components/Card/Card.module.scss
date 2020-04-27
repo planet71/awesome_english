@@ -14,7 +14,6 @@
     transform-style: preserve-3d;
 
     &.hooverable {
-        cursor: pointer;
         &:hover{
             background-color: #F9E104;
         }
@@ -27,7 +26,6 @@
     &.active, 
     &.match {
         transform: rotateY(180deg);
-        cursor: auto;
     }
 
     &.match {
