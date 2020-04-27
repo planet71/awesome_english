@@ -1,31 +1,36 @@
 import React, { memo, useState, useEffect, CSSProperties } from 'react';
 import styles from './Memory.module.scss';
-import { AnimalsCards, Card } from './animals';
 import { Card as CardComponent } from '../../components/Card/Card';
 import { shuffle } from 'lodash';
+import { Card } from '../../domain/Card';
+import { Uuid } from '../../domain/Uuid';
+
+interface MemoryProps {
+    deck: Card[];
+}
 
 interface Matched {
     [key: string]: boolean;
 }
 
 interface Active {
-    id: string;
+    id: Uuid;
     name: string;
 }
 
 type Actives = [Active?, Active?];
 
-const MemoryComponent = () => {
+const MemoryComponent = ({ deck }: MemoryProps) => {
     const [actives, setActives] = useState<Actives>([]);
     const [matched, setMatch] = useState<Matched>({});
     const [name, sayName] = useState<string>();
-    const [cards, setCards] = useState<Card[]>(AnimalsCards);
+    const [cards, setCards] = useState<Card[]>([]);
     const [gridStyles, setGridStyles] = useState<CSSProperties>({});
 
     useEffect(() => {
-        setCards(shuffle(AnimalsCards));
-        setGridStyles(getStyles(AnimalsCards));
-    }, []);
+        setCards(shuffle(deck));
+        setGridStyles(getStyles(deck));
+    }, [deck]);
 
     useEffect(() => {
         if (hasActives(actives)) {
