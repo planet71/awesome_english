@@ -7,20 +7,22 @@ export interface CardProps {
     src: string;
     name: string;
     isActive: boolean;
-    isMatch: boolean;
+    isMatched: boolean;
     onClick?(): void;
 }
 
-const CardComponent = ({ src, name, onClick, isActive, isMatch }: CardProps) => {
+const CardComponent = ({ src, onClick, isActive, isMatched: isMatch }: CardProps) => {
     const [flipped, flip] = useState<boolean>(false);
+    const onClickHandler =
+        !isActive && !isMatch && onClick ? handleOnClick(onClick, flip) : undefined;
 
     return (
         <div
-            onClick={handleOnClick(flip, onClick)}
+            onClick={onClickHandler}
             className={cx(styles.wrapper, {
                 [styles.active]: flipped && isActive,
                 [styles.match]: isMatch,
-                [styles.hooverable]: onClick,
+                [styles.hooverable]: !isActive && !isMatch && onClick,
             })}
         >
             <div
@@ -41,12 +43,9 @@ const CardComponent = ({ src, name, onClick, isActive, isMatch }: CardProps) => 
     );
 };
 
-const handleOnClick = (flip: any, onClick?: () => void) =>
-    onClick
-        ? () => {
-              onClick && onClick();
-              flip(true);
-          }
-        : undefined;
+const handleOnClick = (onClick: () => void, flip: any) => () => {
+    onClick();
+    flip(true);
+};
 
 export const Card = memo(CardComponent);
