@@ -1,7 +1,8 @@
-import React, { useState, memo } from 'react';
-import styles from './Card.module.scss';
-import pattern from '../../assets/patterns/bush.png';
 import cx from 'classnames';
+import React, { memo, useEffect, useRef, useState } from 'react';
+
+import pattern from '../../assets/patterns/bush.png';
+import styles from './Card.module.scss';
 
 export interface CardProps {
     src: string;
@@ -11,10 +12,30 @@ export interface CardProps {
     onClick?(): void;
 }
 
-const CardComponent = ({ src, onClick, isActive, isMatched: isMatch }: CardProps) => {
+const CardComponent = ({ name, src, onClick, isActive, isMatched: isMatch }: CardProps) => {
     const [flipped, flip] = useState<boolean>(false);
+    const [isSaying, setIsSaying] = useState<boolean>(false);
+    const speech = useRef(new SpeechSynthesisUtterance(name));
+    const synth = useRef(window.speechSynthesis);
+
     const onClickHandler =
-        !isActive && !isMatch && onClick ? handleOnClick(onClick, flip) : undefined;
+        !isActive && !isMatch && onClick
+            ? handleOnClick(onClick, flip)
+            : isMatch
+            ? handleOnMatchedClick(speech.current, synth.current, isSaying, setIsSaying)
+            : undefined;
+
+    useEffect(() => {
+        const speechRef = speech.current;
+        speechRef.rate = 0.8;
+
+        const stopSaying = () => setIsSaying(false);
+        speechRef.addEventListener('end', stopSaying);
+
+        return () => {
+            speechRef.removeEventListener('end', stopSaying);
+        };
+    }, [isSaying]);
 
     return (
         <div
@@ -46,6 +67,18 @@ const CardComponent = ({ src, onClick, isActive, isMatched: isMatch }: CardProps
 const handleOnClick = (onClick: () => void, flip: any) => () => {
     onClick();
     flip(true);
+};
+
+const handleOnMatchedClick = (
+    speech: SpeechSynthesisUtterance,
+    synth: SpeechSynthesis,
+    isSaying: boolean,
+    setIsSaying: any,
+) => () => {
+    if (!isSaying) {
+        setIsSaying(true);
+        synth.speak(speech);
+    }
 };
 
 export const Card = memo(CardComponent);

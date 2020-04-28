@@ -1,12 +1,15 @@
-import React, { memo, useState, useEffect, CSSProperties } from 'react';
-import styles from './Memory.module.scss';
+import { sampleSize, shuffle } from 'lodash';
+import React, { CSSProperties, memo, useEffect, useRef, useState } from 'react';
+import uniqid from 'uniqid';
+
 import { Card as CardComponent } from '../../components/Card/Card';
-import { shuffle } from 'lodash';
-import { Card } from '../../domain/Card';
+import { Card, CardWithId } from '../../domain/Card';
 import { Uuid } from '../../domain/Uuid';
+import styles from './Memory.module.scss';
 
 interface MemoryProps {
     deck: Card[];
+    deckSize: number;
 }
 
 interface Matched {
@@ -20,17 +23,30 @@ interface Active {
 
 type Actives = [Active?, Active?];
 
-const MemoryComponent = ({ deck }: MemoryProps) => {
+const MemoryComponent = ({ deck, deckSize }: MemoryProps) => {
     const [actives, setActives] = useState<Actives>([]);
     const [matched, setMatch] = useState<Matched>({});
     const [name, sayName] = useState<string>();
-    const [cards, setCards] = useState<Card[]>([]);
+    const [cards, setCards] = useState<CardWithId[]>([]);
     const [gridStyles, setGridStyles] = useState<CSSProperties>({});
+    const synth = useRef(window.speechSynthesis);
+    const speech = useRef(new SpeechSynthesisUtterance());
 
     useEffect(() => {
-        setCards(shuffle(deck));
-        setGridStyles(getStyles(deck));
-    }, [deck]);
+        const sampledDeck = sampleSize(deck, deckSize / 2);
+        const sampledDeckWithId = [...sampledDeck, ...sampledDeck].map((card) => ({
+            ...card,
+            id: uniqid(),
+        }));
+        setCards(shuffle(sampledDeckWithId));
+        setGridStyles(getStyles(sampledDeckWithId));
+        setActives([]);
+        setMatch({});
+    }, [deck, deckSize]);
+
+    useEffect(() => {
+        speech.current.rate = 0.8;
+    }, []);
 
     useEffect(() => {
         if (hasActives(actives)) {
@@ -53,8 +69,8 @@ const MemoryComponent = ({ deck }: MemoryProps) => {
 
     useEffect(() => {
         if (name) {
-            const synth = window.speechSynthesis;
-            synth.speak(new SpeechSynthesisUtterance(name));
+            speech.current.text = name;
+            synth.current.speak(speech.current);
         }
     }, [name]);
 

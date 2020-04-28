@@ -1,17 +1,12 @@
-import uniqid from 'uniqid';
 import { Card } from '../domain/Card';
 
-import { Animal } from './animals';
-import { Vegetable } from './vegetables';
-
-const createDeckFrom = (array: string[], folder: string): Card[] =>
-    [...array, ...array].map((element) => ({
+export const createDeckFrom = (array: string[], folder: string): Card[] =>
+    array.map((element) => ({
         name: element,
-        src: `/${folder}/${element}.jpg`,
-        id: uniqid(),
+        src: `${folder}/${element}.jpg`,
     }));
 
-const animals = createDeckFrom(Object.values(Animal), 'animals');
-const vegetables = createDeckFrom(Object.values(Vegetable), 'vegetables');
-
-export { animals, vegetables };
+export enum Deck {
+    Animals = 'Animals',
+    Vegetables = 'Vegetables',
+}
