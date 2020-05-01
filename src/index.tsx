@@ -1,6 +1,9 @@
+import './index.scss';
+import 'typeface-princess-sofia';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

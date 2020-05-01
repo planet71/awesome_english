@@ -1,8 +1,11 @@
 @import-normalize;
 
+* {
+    cursor: url('./assets/cursor.png'), auto !important;
+}
+
 body {
     overflow: hidden;
-    cursor: url('./assets/cursor.png'), auto;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",

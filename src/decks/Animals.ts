@@ -1,4 +1,4 @@
-export enum Animal {
+enum Animal {
     Dog = 'dog',
     Cat = 'cat',
     Zebra = 'zebra',
@@ -12,3 +12,5 @@ export enum Animal {
     Pig = 'pig',
     Squirrel = 'squirrel',
 }
+
+export const Animals = Object.values(Animal);

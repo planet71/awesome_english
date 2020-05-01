@@ -1,0 +1,39 @@
+.wrapper {
+    position: relative;
+}
+
+.button {
+    position: fixed;
+    top: 2em;
+    left: 2em;
+    width: 2em;
+    height: 2em;
+    background-image: url('../../assets/settings.png');
+    background-size: cover;
+    transition: transform .5s;
+    z-index: 10;
+
+    &:hover {
+        transform: rotate(90deg);
+    }
+}
+
+.dialog {
+    box-sizing: border-box;
+    padding: 2em;
+}
+
+.close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 2em;
+    height: 2em;
+    background-image: url('../../assets/close.png');
+    background-size: cover;
+    transition: transform .5s;
+
+    &:hover {
+        transform: rotate(90deg);
+    }
+}

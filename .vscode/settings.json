@@ -1,0 +1,8 @@
+{
+    "typescriptHero.imports.grouping": [
+        "Plains",
+        "Modules",
+        "Workspace"
+    ],
+    "typescriptHero.imports.organizeOnSave": true
+}

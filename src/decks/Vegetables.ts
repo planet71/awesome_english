@@ -1,4 +1,4 @@
-export enum Vegetable {
+enum Vegetable {
     Cucumber = 'cucumber',
     Tomato = 'tomato',
     Radish = 'radish',
@@ -12,3 +12,4 @@ export enum Vegetable {
     Broccoli = 'broccoli',
     Cauliflower = 'cauliflower',
 }
+export const Vegetables = Object.values(Vegetable);
